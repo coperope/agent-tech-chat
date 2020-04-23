@@ -1,0 +1,42 @@
+<table class="table">
+  <thead>
+      <tr>
+          <th scope="col" *ngFor='let param of Headers'>{{param}}</th>
+          <th scope="col">
+              
+          </th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let user of users">
+          <td> {{user.username}} </td>
+          <td> {{user.host}} </td>
+          <td>
+              <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Options
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" style="cursor: pointer;"
+                          (click)="sendMessage(user.username,sendMessageModal)">Send Message</a>
+                  </div>
+              </div>
+          </td>
+      </tr>
+  </tbody>
+</table>
+
+<ng-template #sendMessageModal let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Send message</h4>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ">
+    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage> 
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>

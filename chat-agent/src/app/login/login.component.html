@@ -1,0 +1,27 @@
+<div class="col-md-6 offset-md-3 mt-5">
+  <div class="card">
+      <h4 class="card-header">Login</h4>
+      <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" [ngClass]="{ 'is-invalid': submitted && loginForm.controls.username.errors }" class="form-control" formControlName="username" placeholder="example@kcv.rs"/>
+                    <div *ngIf="submitted && loginForm.controls.username.errors" class="invalid-feedback">
+                        <div *ngIf="loginForm.controls.username.errors.required">username is required</div>
+                        <div *ngIf="loginForm.controls.username.errors.username">username must be valid.</div>
+                    </div>
+                </div>
+              <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password"  name="password" [ngClass]="{ 'is-invalid': submitted && loginForm.controls.password.errors }" class="form-control" formControlName="password" placeholder="*****"/>
+                    <div *ngIf="submitted && loginForm.controls.password.errors" class="invalid-feedback">
+                        <div *ngIf="loginForm.controls.password.errors.required">Password is required</div>
+                        <div *ngIf="loginForm.controls.password.errors.minlength">Password is at least 6 characters long</div>
+                        <div *ngIf="loginForm.controls.password.errors.maxlength">Password is maximum 24 characters long</div>
+                    </div>
+                </div>
+              <button class="btn btn-primary">Submit</button>
+          </form>
+      </div>
+  </div>
+</div>

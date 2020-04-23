@@ -1,0 +1,47 @@
+<div *ngIf="HomeService.checkLoggedIn()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+          <label for="oldPassword">Message</label>
+          <input type="text" [ngClass]="{ 'is-invalid': submitted && form.controls.message.errors }" class="form-control"
+              formControlName="message" />
+          <div *ngIf="submitted && form.controls.message.errors" class="invalid-feedback">
+              <div *ngIf="form.controls.message.errors.required">Message is required</div>
+          </div>
+      </div>
+      <button class="btn btn-primary">Submit</button>
+  </form>
+  
+  <div id="main-content" class="container">
+  
+  
+      <div class="row mt-3">
+          <div>
+              <form class="form-inline">
+                  <div class="form-group">
+                      <label class="col-md-6 col-form-label font-weight-bold" for="connect">WebSocket connection:</label>
+                      <div class="col-sm-4  shadow-sm p-1 mb-1 bg-white rounded">
+                          <button (click)="connect()" class="btn btn-light" type="submit">Connect</button>
+                      </div>
+                      <div class="col-sm-4  shadow-sm p-1 mb-1 bg-white rounded">
+                          <button (click)="disconnect()" class="btn btn-dark" type="submit" disabled="disabled">Disconnect
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <form class="form-inline">
+                  <div class="form-group">
+                      <label class="col-sm-5 col-form-label font-weight-bold" for="name">What is your name?</label>
+                      <input type="text" [(ngModel)]="name" class="form-control" name="name"> <br>
+                  </div>
+                  <button (click)="sendMessage()" class="btn btn-light" type="submit">Send</button>
+              </form>
+          </div>
+      </div>
+  
+  
+  </div>
+  </div>

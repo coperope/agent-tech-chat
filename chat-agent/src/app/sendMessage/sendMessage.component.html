@@ -1,0 +1,47 @@
+
+  <div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <fieldset >
+          <div class="form-group row col-lg-12">
+              <div class="row col-lg-10 shadow-sm p-1 mb-1 ml-3 bg-white rounded col">
+                  <div class="col">
+                      <input type="text" formControlName="subject" class="form-control"
+                          [ngClass]="{ 'is-invalid': submitted && form.controls.subject.errors }" id="subject"
+                          style="border: 0;" placeholder="Subject"/>
+                      <div *ngIf="submitted && form.controls.subject.errors" class="invalid-feedback">
+                          <div *ngIf="form.controls.subject.errors.required">Subject is required</div>
+                      </div>
+                  </div>
+            
+              </div>
+          </div>
+      </fieldset>
+      <div class="form-group row col-lg-12">
+          <div class="row col-lg-10  shadow-sm p-1 mb-1 ml-3 bg-white rounded">
+            <div class="col ">
+              <textarea rows="10" [ngClass]="{ 'is-invalid': submitted && form.controls.content.errors }"
+                  class="form-control" formControlName="content" style="border: 0;" placeholder="Content"></textarea>
+              <div *ngIf="submitted && form.controls.content.errors" class="invalid-feedback">
+                  <div *ngIf="form.controls.content.errors.required">Content is required</div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-lg-10">
+        <hr>
+    </div>
+    
+  
+      
+   
+    <div class="row col-lg-12 bg-white rounded">
+      <div class="row col-lg-10  p-1 mb-1 ml-3 bg-white rounded">
+        <div class="col ">
+          <button type="submit" class="btn btn-primary ml-2 float-right" >
+          Send</button>
+          <button type="button" class="btn btn-outline-primary ml-1 float-right" (click)='cancel()'>Cancel</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
