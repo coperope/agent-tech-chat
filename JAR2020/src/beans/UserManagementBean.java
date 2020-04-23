@@ -1,7 +1,11 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -17,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import model.Host;
+import model.Message;
 import model.User;
 import ws.WSEndPoint;
 
@@ -69,8 +74,8 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Wrong password").build();
     		
     	}
-    	usrmsg.usersLoggedin.put(user.getUsername(), user);
-		ws.echoTextMessage(user.toString());
+    	usrmsg.usersLoggedin.put(user.getUsername(), regUser);
+		ws.echoTextMessage(regUser.toString());
 		return Response.status(200).build();
 	}
     
@@ -98,6 +103,51 @@ public class UserManagementBean {
     	
     	return Response.status(Response.Status.OK).entity(usersRegistered).build();
     	
-    	
     }
+    
+    @POST
+	@Path("/messages/all")
+    @Consumes(MediaType.APPLICATION_JSON)
+	public Response sendToAll(Message msg) {
+    	System.out.println(msg.getContent());
+    	if (msg.getSender() == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not found.").build();
+    	}
+    	User sender = usrmsg.usersRegistered.get(msg.getSender());
+    	if (sender == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not registered.").build();
+    	}
+    	for (Map.Entry<String, User> user : usrmsg.usersRegistered.entrySet()) {
+    		if(user.getValue().getUsername().equals(sender.getUsername())) {
+    			continue;
+    		}
+    		User u = user.getValue();
+    		u.receiveMessage(msg);
+    	}
+    	
+		ws.echoTextMessage(msg.getContent());
+		return Response.status(200).build();
+	}
+    @POST
+	@Path("/messages/users")
+    @Consumes(MediaType.APPLICATION_JSON)
+	public Response sendToUser(Message msg) {
+    	System.out.println(msg.getContent());
+    	if (msg.getSender() == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not found.").build();
+    	}
+    	if (msg.getReceiver() == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver not found.").build();
+    	}
+    	System.out.println(msg.getReceiver()+msg.getSender());
+    	User receiver = usrmsg.usersRegistered.get(msg.getReceiver());
+    	User sender = usrmsg.usersRegistered.get(msg.getSender());
+    	if (receiver == null || sender == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver or sender is not registered.").build();
+    	}
+    	receiver.receiveMessage(msg);
+    	sender.sendedMessage(msg);
+		ws.echoTextMessage(msg.getContent());
+		return Response.status(200).build();
+	}
 }

@@ -4,47 +4,47 @@ import java.util.Date;
 
 public class Message {
 	
-	private User from;
-	private User to;
+	private String sender;
+	private String receiver;
 	private Date date;
 	private String subject;
 	private String content;
 	
 	public Message() {}
 	
-	public Message(User from, User to, String subject, String content) {
+	public Message(String from, String to, String subject, String content) {
 		super();
-		this.from = from;
-		this.to = to;
+		this.sender = from;
+		this.receiver = to;
 		this.date = new Date(System.currentTimeMillis());
 		this.subject = subject;
 		this.content = content;
 	}
 
 
-	public Message(User from, User to, Date date, String subject, String content) {
+	public Message(String from, String to, Date date, String subject, String content) {
 		super();
-		this.from = from;
-		this.to = to;
+		this.sender = from;
+		this.receiver = to;
 		this.date = date;
 		this.subject = subject;
 		this.content = content;
 	}
 
-	public User getFrom() {
-		return from;
+	public String getSender() {
+		return sender;
 	}
 
-	public void setFrom(User from) {
-		this.from = from;
+	public void setSender(String from) {
+		this.sender = from;
 	}
 
-	public User getTo() {
-		return to;
+	public String getReceiver() {
+		return receiver;
 	}
 
-	public void setTo(User to) {
-		this.to = to;
+	public void setReceiver(String to) {
+		this.receiver = to;
 	}
 
 	public Date getDate() {
