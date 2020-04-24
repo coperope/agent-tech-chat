@@ -1,29 +1,34 @@
 <table class="table">
   <thead>
-      <tr>
-          <th scope="col" *ngFor='let param of Headers'>{{param}}</th>
-          <th scope="col">
-              
-          </th>
-      </tr>
+    <tr>
+      <th scope="col" *ngFor='let param of Headers'>{{param}}</th>
+      <th scope="col">
+
+      </th>
+    </tr>
   </thead>
   <tbody>
-      <tr *ngFor="let user of users">
-          <td> {{user.username}} </td>
-          <td> {{user.host}} </td>
-          <td>
-              <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Options
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" style="cursor: pointer;"
-                          (click)="sendMessage(user.username,sendMessageModal)">Send Message</a>
-                  </div>
-              </div>
-          </td>
-      </tr>
+    <tr *ngFor="let user of users">
+      <td> {{user.username}} </td>
+      <td> {{user.host}} </td>
+      <td> 
+        <button class="btn btn-secondary" type="button" (click)="sendToEveryone()">
+          Send message to everyone
+        </button>
+      </td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Options
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" style="cursor: pointer;" (click)="sendMessage(user.username,sendMessageModal)">Send
+              Message</a>
+          </div>
+        </div>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -35,7 +40,7 @@
     </button>
   </div>
   <div class="modal-body ">
-    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage> 
+    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage>
   </div>
   <div class="modal-footer">
   </div>

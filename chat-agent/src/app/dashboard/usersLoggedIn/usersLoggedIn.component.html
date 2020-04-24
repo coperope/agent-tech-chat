@@ -13,6 +13,11 @@
       <tr *ngFor="let user of users">
           <td> {{user.username}} </td>
           <td> {{user.host}} </td>
+          <td> 
+            <button class="btn btn-secondary" type="button" (click)="sendToEveryone()">
+              Send message to everyone
+            </button>
+          </td>
           <td>
               <div class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -21,7 +26,7 @@
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a class="dropdown-item" style="cursor: pointer;"
-                          (click)="sendMessage(user)">Send Message</a>
+                          (click)="sendMessage(user.username,  sendMessageModal)">Send Message</a>
                   </div>
               </div>
           </td>
@@ -29,7 +34,7 @@
   </tbody>
 </table>
 
-<!-- <ng-template #sendMessageModal let-close="close">
+<ng-template #sendMessageModal let-close="close">
   <div class="modal-header">
     <h4 class="modal-title">Send message</h4>
     <button type="button" class="close" (click)="close()">
@@ -37,11 +42,8 @@
     </button>
   </div>
   <div class="modal-body ">
-      <app-sendMessage [user]="modalData.user" (notifyParent)="close()"></app-sendMessage> 
+    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">
-      Cancel
-    </button>
   </div>
-</ng-template> -->
+</ng-template>

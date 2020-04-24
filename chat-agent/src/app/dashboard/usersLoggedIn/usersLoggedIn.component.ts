@@ -12,7 +12,8 @@ export class UsersLoggedInComponent implements OnInit {
   @ViewChild('sendMessageModal', { static: true }) sendMessageModal: TemplateRef<any>;
   
   Headers = ['Username', 'Host'];
-	users: any;
+  users: any;
+  user: any;
   navigationSubscription: any;
   
   modalData: {
@@ -42,8 +43,13 @@ export class UsersLoggedInComponent implements OnInit {
 			}
 		);
   }
-  sendMessage(user){
+  sendMessage(user, component){
+	this.user = user;
+	console.log(this.user);
     let action = "Opened";
-		this.modal.open(this.sendMessageModal, { size: 'lg' });
+	this.modal.open(component, { size: 'lg' });
+  }
+  sendToEveryone(){
+	  
   }
 }

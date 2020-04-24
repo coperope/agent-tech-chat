@@ -6,8 +6,10 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -70,5 +72,19 @@ public class MessageManagementBean {
     	sender.sendedMessage(msg);
 		ws.echoTextMessage(msg.getContent());
 		return Response.status(200).build();
+	}
+    
+    @GET
+	@Path("/{user}")
+    @Consumes(MediaType.APPLICATION_JSON)
+	public Response getMessages(@PathParam("user") String user) {
+    	User u = usrmsg.usersLoggedin.get(user);
+    	if (u == null) {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("User not provided or not logged in.").build();
+    	}
+    	
+    	return Response.status(Response.Status.OK).entity(u.getInbox()).build();
+		//ws.echoTextMessage(msg.getContent());
+		//return Response.status(200).build();
 	}
 }
