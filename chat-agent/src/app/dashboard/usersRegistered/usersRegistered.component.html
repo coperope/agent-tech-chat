@@ -12,7 +12,7 @@
       <td> {{user.username}} </td>
       <td> {{user.host}} </td>
       <td> 
-        <button class="btn btn-secondary" type="button" (click)="sendToEveryone()">
+        <button class="btn btn-secondary" type="button" (click)="sendToEveryone(sendMessageModal)">
           Send message to everyone
         </button>
       </td>
@@ -24,7 +24,8 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" style="cursor: pointer;" (click)="sendMessage(user.username,sendMessageModal)">Send
-              Message</a>
+              Message
+            </a>
           </div>
         </div>
       </td>

@@ -46,7 +46,9 @@ export class UsersRegisteredComponent implements OnInit {
     let action = "Opened";
 	this.modal.open(component, { size: 'lg' });
   }
-  sendToEveryone(){
-	  
+  sendToEveryone(component){
+	this.user = null;
+    let action = "Opened";
+	this.modal.open(component, { size: 'lg' });
   }
 }
