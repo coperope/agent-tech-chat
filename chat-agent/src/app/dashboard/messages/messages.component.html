@@ -1,0 +1,59 @@
+<div class='row'>
+  <div class='col-md-3'>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            <button class="btn btn-secondary" type="button" (click)="sendToEveryone()">
+              Send message to everyone
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users" (click)="RowSelected(u);">
+          <td > {{user.username}} </td>
+          <td> {{user.host}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class='col-md-8'>
+    <div class='row mb-3 border '>
+      <div id="" style="overflow-y:scroll; overflow-x:hidden; height:20em; width: 60em;">
+        <div class="row ml-3">
+          message
+        </div>
+        <div class="row ml-3 ">
+          message
+        </div>
+      </div>
+    </div>
+    <div class='row mt-3'>
+      <div class='col-md-10'>
+        <textarea rows="5" cols="70">
+        </textarea>
+      </div>
+      <div class='col-md-1'>
+        <button class="btn btn-secondary" type="button" (click)="sendToUser()">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #sendMessageModal let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Send message</h4>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ">
+    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage>
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>

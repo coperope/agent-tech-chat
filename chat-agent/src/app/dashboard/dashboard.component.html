@@ -1,8 +1,12 @@
 <div class='row'>
 	<ul class="nav nav-pills container" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 		<li class="nav-item">
-			<a class="nav-link active" data-toggle="pill" [routerLink]="['./usersRegistered']" href="#v-pills-calendar" role="tab"
-				aria-controls="v-pills-home" aria-selected="true">Registered users</a>
+			<a class="nav-link active" data-toggle="pill" [routerLink]="['./messages']" role="tab"
+				aria-controls="v-pills-home" aria-selected="true">Messages</a>
+        </li>
+		<li class="nav-item">
+			<a class="nav-link " data-toggle="pill" [routerLink]="['./usersRegistered']" role="tab"
+			 aria-selected="true">Registered users</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="pill" [routerLink]="['./usersLoggedIn']" role="tab" aria-controls="v-pills-home"

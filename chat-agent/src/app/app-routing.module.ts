@@ -9,6 +9,7 @@ import { MessengerComponent } from './messenger/messenger.component';
 import { CommonModule } from "@angular/common";
 import { UsersRegisteredComponent } from './dashboard/usersRegistered/usersRegistered.component';
 import { SendMessageComponent } from './sendMessage/sendMessage.component';
+import { MessagesComponent } from './dashboard/messages/messages.component';
 
 const routes: Routes = [
   {
@@ -33,7 +34,8 @@ const routes: Routes = [
     children:[
       {path: 'usersLoggedIn', component: UsersLoggedInComponent},
       {path: 'usersRegistered', component: UsersRegisteredComponent},
-      {path: 'sendMessage', component: SendMessageComponent}
+      {path: 'sendMessage', component: SendMessageComponent},
+      {path: 'messages', component: MessagesComponent}
 		],
 	}
 ];

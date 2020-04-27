@@ -18,12 +18,12 @@
                   <li class="nav-item" *ngIf="HomeService.checkLoggedIn()">
                       <!-- *ngIf="HomeService.user" -->
                       <a class="nav-link"
-                          routerLink="/dashboard">Dashboard</a>
+                          routerLink="/dashboard/messages">Messenger</a>
                   </li>
                   <li class="nav-item" *ngIf="HomeService.checkLoggedIn()">
                     <!-- *ngIf="HomeService.user" -->
-                    <a class="nav-link"
-                        routerLink="/messenger">Messenger</a>
+                    <!-- <a class="nav-link"
+                        routerLink="/messenger">Messenger</a>-->
                 </li>
                   <li class="nav-item" *ngIf="!HomeService.checkLoggedIn()">
                       <a class="nav-link" routerLink="/login">Login</a>
