@@ -23,14 +23,10 @@ export class UsersLoggedInComponent implements OnInit {
     private HomeService: HomeService,
     private modal: NgbModal,
 	) {
-		this.navigationSubscription = this.router.events.subscribe((e: any) => {
-			if (e instanceof NavigationEnd) {
-				this.getUsersLoggedIn();
-			}
-		});
 	}
 
 	ngOnInit() {
+		this.getUsersLoggedIn();
 	}
 
 	getUsersLoggedIn() {

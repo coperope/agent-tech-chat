@@ -1,3 +1,4 @@
+import { MessagesComponent } from './dashboard/messages/messages.component';
 import { UsersRegisteredComponent } from './dashboard/usersRegistered/usersRegistered.component';
 import { UsersLoggedInComponent } from './dashboard/usersLoggedIn/usersLoggedIn.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,7 +28,8 @@ import { SendMessageComponent } from './sendMessage/sendMessage.component';
       MessengerComponent,
       SendMessageComponent,
       UsersLoggedInComponent,
-      UsersRegisteredComponent
+      UsersRegisteredComponent,
+      MessagesComponent
    ],
    imports: [
       BrowserModule,

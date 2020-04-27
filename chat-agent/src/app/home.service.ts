@@ -137,12 +137,40 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		console.log(message);
-		return this.http.post(`/rest/users/messages/users`, message, { headers, observe: 'response' })
+		return this.http.post(`/rest/messages/users`, message, { headers, observe: 'response' })
 		.pipe(
 			map((response) => {
 				const userState = response.body;
 				return userState;
+			}),
+			catchError((response) => {
+				return throwError(response.error);
+			})
+		);
+	}
+	sendMessageToEveryone(message){
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json'
+		});
+		return this.http.post(`/rest/messages/all`, message, { headers, observe: 'response' })
+		.pipe(
+			map((response) => {
+				const userState = response.body;
+				return userState;
+			}),
+			catchError((response) => {
+				return throwError(response.error);
+			})
+		);
+	}
+	getUserMessages(){
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json'
+		});
+		return this.http.get(`/rest/messages/${this.user.username}`, { observe: 'response' }).pipe(
+			map((response) => {
+				console.log(response);
+				return response.body;
 			}),
 			catchError((response) => {
 				return throwError(response.error);

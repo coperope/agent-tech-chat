@@ -34,8 +34,8 @@ const routes: Routes = [
     children:[
       {path: 'usersLoggedIn', component: UsersLoggedInComponent},
       {path: 'usersRegistered', component: UsersRegisteredComponent},
+      {path: 'messages', component: MessagesComponent},
       {path: 'sendMessage', component: SendMessageComponent},
-      {path: 'messages', component: MessagesComponent}
 		],
 	}
 ];

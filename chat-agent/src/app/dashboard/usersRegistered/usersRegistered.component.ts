@@ -20,14 +20,10 @@ export class UsersRegisteredComponent implements OnInit {
     private HomeService: HomeService,
     private modal: NgbModal,
 	) {
-		this.navigationSubscription = this.router.events.subscribe((e: any) => {
-			if (e instanceof NavigationEnd) {
-				this.getUsersRegistered();
-			}
-		});
 	}
 
 	ngOnInit() {
+		this.getUsersRegistered();
 	}
 
 	getUsersRegistered() {

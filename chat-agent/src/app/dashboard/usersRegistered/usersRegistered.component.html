@@ -11,11 +11,6 @@
     <tr *ngFor="let user of users">
       <td> {{user.username}} </td>
       <td> {{user.host}} </td>
-      <td> 
-        <button class="btn btn-secondary" type="button" (click)="sendToEveryone(sendMessageModal)">
-          Send message to everyone
-        </button>
-      </td>
       <td>
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"

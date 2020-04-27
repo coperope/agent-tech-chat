@@ -1,19 +1,12 @@
-<div class='row'>
+<div class='row mt-3'>
   <div class='col-md-3'>
-    <table class="table">
+    <table class="table table-hover">
       <thead>
-        <tr>
-          <th>
-            <button class="btn btn-secondary" type="button" (click)="sendToEveryone()">
-              Send message to everyone
-            </button>
-          </th>
-        </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users" (click)="RowSelected(u);">
-          <td > {{user.username}} </td>
-          <td> {{user.host}} </td>
+        <tr class=" m-1 p-2 shadow-sm border border-secondary rounded" *ngFor="let user of inbox | keyvalue"
+          (click)="RowSelected(user.value);">
+          <div class="col align-self-center rounded text-info">{{user.key}}</div>
         </tr>
       </tbody>
     </table>
@@ -21,23 +14,46 @@
   <div class='col-md-8'>
     <div class='row mb-3 border '>
       <div id="" style="overflow-y:scroll; overflow-x:hidden; height:20em; width: 60em;">
-        <div class="row ml-3">
-          message
-        </div>
-        <div class="row ml-3 ">
-          message
+        <div class="container">
+          <div class="row" *ngFor="let msg of messages" [ngClass]="{
+        'mr-3': msg.sender == currUser.username,
+        'ml-3':msg.sender != currUser.username}">
+            <div class="col-md-3 mb-1 shadow-sm rounded" [ngClass]="{
+              'badge-primary offset-md-9': msg.sender == currUser.username,
+              'badge-secondary align-self-start':msg.sender != currUser.username}">
+              <div class="border-bottom">
+                {{msg.subject}}
+              </div>
+              <div>
+                {{msg.content}}
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
     <div class='row mt-3'>
-      <div class='col-md-10'>
-        <textarea rows="5" cols="70">
+      <div class='col-md-9'>
+        <div class='row'>
+          <input type="text" style="width: 97%;" placeholder="Subject">
+        </div>
+        <div class='row mt-3'>
+          <textarea rows="5" cols="70" placeholder="Content">
         </textarea>
+        </div>
       </div>
-      <div class='col-md-1'>
-        <button class="btn btn-secondary" type="button" (click)="sendToUser()">
-          Send
-        </button>
+      <div class='col-md-3'>
+        <div class='row'>
+          <button class="btn btn-secondary" style="width: 97%;" type="button" (click)="sendToEveryone(sendMessageModal)">
+            Send to everyone
+          </button>
+        </div>
+        <div class='row mt-3 ' >
+          <button class="btn btn-secondary" style="width: 97%;" type="button" (click)="sendToUser()">
+            Send
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +68,7 @@
     </button>
   </div>
   <div class="modal-body ">
-    <app-sendMessage [user]="user" (notifyParent)="close()"></app-sendMessage>
+    <app-sendMessage [sendToEveryone]="true" (notifyParent)="close()"></app-sendMessage>
   </div>
   <div class="modal-footer">
   </div>

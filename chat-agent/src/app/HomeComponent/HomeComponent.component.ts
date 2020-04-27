@@ -26,7 +26,7 @@ export class HomeComponentComponent implements OnInit {
 		this.form = this.formBuilder.group({
 			message: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(24)])]
     });
-    this.subject.subscribe();
+    //this.subject.subscribe();
     this.greeting = "CAO";
   }
   onSubmit() {

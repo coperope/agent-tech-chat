@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
-import javax.ejb.Stateless;
 import model.User;
 /**
  * Session Bean implementation class UsrMsg
@@ -21,6 +20,15 @@ public class UsrMsg {
         // TODO Auto-generated constructor stub
     	usersRegistered = new HashMap<String, User>();
     	usersLoggedin = new HashMap<String, User>();
+    }
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	String retVal = "";
+    	for (User user : this.usersRegistered.values()) {
+    		retVal += user.toString() + "\n";
+		}
+    	return retVal;
     }
 
 }

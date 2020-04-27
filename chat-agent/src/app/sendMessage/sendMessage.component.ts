@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SendMessageComponent implements OnInit {
   @Input() user: any;
+  @Input() sendToEveryone: any;
   @Output() notifyParent: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
   submitted: boolean;
@@ -37,12 +38,22 @@ export class SendMessageComponent implements OnInit {
       content: this.form.controls.content.value,
       date: null
     }
-    this.userService.sendMessageToUser(message).subscribe(
-      (data: any) => { 
+    if(!this.sendToEveryone){
+      this.userService.sendMessageToUser(message).subscribe(
+        (data: any) => { 
+          this.notifyParent.emit();
+        }	,
+        (error) => { alert(error); }
+        );
+    }else{
+      this.userService.sendMessageToEveryone(message).subscribe(
+        (data: any) => { 
+          this.notifyParent.emit();
+        }	,
+        (error) => { alert(error); }
+        );
+    }
 
-      }	,
-      (error) => { alert(error); }
-			);
   }
   cancel(){
     
