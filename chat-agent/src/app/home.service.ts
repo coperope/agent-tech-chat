@@ -80,10 +80,7 @@ export class HomeService {
 			);
 	}
 	logout() {
-		const headers = new HttpHeaders({
-			'Content-Type': 'application/json'
-		});
-		return this.http.delete(`/rest/users/loggedIn/${this.user.username}`, {headers, observe: 'response' })
+		return this.http.delete(`/rest/users/loggedIn/${this.user.username}`, {observe: 'response' })
 			.pipe(
 				map((response) => {
 					this.removeUser();

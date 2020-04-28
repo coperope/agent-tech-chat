@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
     .pipe()
     .subscribe(
       data => {
-        
+        alert("Logout successfull");
       },
       error => {
         alert(error);

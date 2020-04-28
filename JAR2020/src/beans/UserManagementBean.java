@@ -96,7 +96,7 @@ public class UserManagementBean {
         	Gson gson = new Gson();
         	String loggedIn = gson.toJson(usersLoggedIn); 
     		ws.echoTextMessage(loggedIn);
-    		return Response.status(Response.Status.OK).entity("Logged out").build();
+    		return Response.status(Response.Status.NO_CONTENT).entity("Logged out").build();
     	}else {
     		return Response.status(Response.Status.BAD_REQUEST).entity("User does not exist").build();
     	}
