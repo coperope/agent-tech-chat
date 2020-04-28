@@ -40,7 +40,7 @@ export class HomeService {
 			responseType: 'text',
 			observe: 'response'
 		};
-		return this.http.post(`/rest/chat/post/${message.message}`, '', { headers: new HttpHeaders({ 'Content-Type': 'application/text', accept: 'text/plain' }), observe: 'body', responseType: 'text' })
+		return this.http.post(`/WAR2020/rest/chat/post/${message.message}`, '', { headers: new HttpHeaders({ 'Content-Type': 'application/text', accept: 'text/plain' }), observe: 'body', responseType: 'text' })
 			.pipe(
 				map(response => {
 					console.log(response);
@@ -66,7 +66,7 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		return this.http.post('/rest/users/login', user, { headers, observe: 'response' })
+		return this.http.post('/WAR2020/rest/users/login', user, { headers, observe: 'response' })
 			.pipe(
 				map((response) => {
 					this.setUser(user);
@@ -80,7 +80,7 @@ export class HomeService {
 			);
 	}
 	logout() {
-		return this.http.delete(`/rest/users/loggedIn/${this.user.username}`, {observe: 'response' })
+		return this.http.delete(`/WAR2020/rest/users/loggedIn/${this.user.username}`, {observe: 'response' })
 			.pipe(
 				map((response) => {
 					this.removeUser();
@@ -96,7 +96,7 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		return this.http.post('/rest/users/register', registerRequest, { headers, observe: 'response' })
+		return this.http.post('/WAR2020/rest/users/register', registerRequest, { headers, observe: 'response' })
 			.pipe(
 				map((response) => {
 					const userState = response.body;
@@ -111,7 +111,7 @@ export class HomeService {
 	}
 
 	getUsersLoggedIn() {
-		return this.http.get('/rest/users/loggedIn', { observe: 'response' }).pipe(
+		return this.http.get('/WAR2020/rest/users/loggedIn', { observe: 'response' }).pipe(
 			map((response) => {
 				console.log(response);
 				return response.body;
@@ -123,7 +123,7 @@ export class HomeService {
 	}
 
 	getUsersRegistered() {
-		return this.http.get('/rest/users/registered', { observe: 'response' }).pipe(
+		return this.http.get('/WAR2020/rest/users/registered', { observe: 'response' }).pipe(
 			map((response) => {
 				console.log(response);
 				return response.body;
@@ -137,7 +137,7 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		return this.http.post(`/rest/messages/users`, message, { headers, observe: 'response' })
+		return this.http.post(`/WAR2020/rest/messages/users`, message, { headers, observe: 'response' })
 		.pipe(
 			map((response) => {
 				const userState = response.body;
@@ -152,7 +152,7 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		return this.http.post(`/rest/messages/all`, message, { headers, observe: 'response' })
+		return this.http.post(`/WAR2020/rest/messages/all`, message, { headers, observe: 'response' })
 		.pipe(
 			map((response) => {
 				const userState = response.body;
@@ -167,7 +167,7 @@ export class HomeService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		return this.http.get(`/rest/messages/${this.user.username}`, { observe: 'response' }).pipe(
+		return this.http.get(`/WAR2020/rest/messages/${this.user.username}`, { observe: 'response' }).pipe(
 			map((response) => {
 				console.log(response);
 				return response.body;
