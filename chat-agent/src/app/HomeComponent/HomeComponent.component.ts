@@ -15,7 +15,7 @@ export class HomeComponentComponent implements OnInit {
 	submitted = false;
   greeting: any;
   name: string;
-  subject = webSocket('ws://localhost:8080/WAR2020/ws')
+  subject = webSocket('ws://localhost:8080/WAR2020/ws');
 	constructor(public HomeService: HomeService,
 		private router: Router,
     private formBuilder: FormBuilder,

@@ -5,3 +5,7 @@
     -ms-transform: translateY(-90%);
     transform: translateY(-90%);
   }
+  .align-to-right {
+    margin-left:auto;
+    margin-right:0;
+  }

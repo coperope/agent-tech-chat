@@ -22,8 +22,7 @@ export class HeaderComponent implements OnInit {
     .pipe()
     .subscribe(
       data => {
-        //this.router.navigate([this.returnUrl]);
-        alert(data);
+        
       },
       error => {
         alert(error);

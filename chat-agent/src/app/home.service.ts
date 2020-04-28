@@ -70,7 +70,7 @@ export class HomeService {
 			.pipe(
 				map((response) => {
 					this.setUser(user);
-					this.router.navigate(['/']);
+					this.router.navigate(['/dashboard/messages']);
 
 					return this.user;
 				}),
@@ -80,7 +80,10 @@ export class HomeService {
 			);
 	}
 	logout() {
-		return this.http.delete(`/rest/users/loggedIn/${this.user.username}`, { observe: 'response' })
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json'
+		});
+		return this.http.delete(`/rest/users/loggedIn/${this.user.username}`, {headers, observe: 'response' })
 			.pipe(
 				map((response) => {
 					this.removeUser();

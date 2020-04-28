@@ -22,6 +22,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.Gson;
+
 import model.Host;
 import model.Message;
 import model.User;
@@ -35,7 +37,8 @@ import ws.WSEndPoint;
 @Path("/")
 public class UserManagementBean {
 
-	
+	@EJB
+	WSEndPoint ws;
 	
 	@Inject
 	UsrMsg usrmsg;
@@ -76,7 +79,11 @@ public class UserManagementBean {
     		
     	}
     	usrmsg.usersLoggedin.put(user.getUsername(), regUser);
-		//ws.echoTextMessage(regUser.toString());
+    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
+    	Gson gson = new Gson();
+    	String loggedIn = gson.toJson(usersLoggedIn); 
+    	System.out.println(loggedIn);
+		ws.echoTextMessage(loggedIn);
 		return Response.status(200).build();
 	}
     
@@ -85,15 +92,20 @@ public class UserManagementBean {
     public Response logout(@PathParam("user") String user) {
     	if(usrmsg.usersLoggedin.get(user) != null) {
     		usrmsg.usersLoggedin.remove(user);
+    		Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
+        	Gson gson = new Gson();
+        	String loggedIn = gson.toJson(usersLoggedIn); 
+    		ws.echoTextMessage(loggedIn);
     		return Response.status(Response.Status.OK).entity("Logged out").build();
+    	}else {
+    		return Response.status(Response.Status.BAD_REQUEST).entity("User does not exist").build();
     	}
-    	return Response.status(Response.Status.BAD_REQUEST).entity("User does not exist").build();
+    	
     	
     }
     @GET
     @Path("users/loggedIn")
     public Response loggedInUsers() {
-    	System.out.println(usrmsg.toString());
     	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
     	return Response.status(Response.Status.OK).entity(usersLoggedIn).build();
     }
@@ -112,7 +124,6 @@ public class UserManagementBean {
 	@Path("messages/all")
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response sendToAll(Message msg) {
-    	System.out.println(usrmsg.toString());
     	System.out.println(msg.getContent());
     	if (msg.getSender() == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not found.").build();
@@ -146,7 +157,6 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver not found.").build();
     	}
     	System.out.println(msg.getReceiver()+msg.getSender());
-    	System.out.println(usrmsg.toString());
     	User receiver = usrmsg.usersRegistered.get(msg.getReceiver());
     	User sender = usrmsg.usersRegistered.get(msg.getSender());
     	if (receiver == null || sender == null) {
@@ -163,8 +173,6 @@ public class UserManagementBean {
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response getMessages(@PathParam("user") String user) {
     	User u = usrmsg.usersRegistered.get(user);
-    	System.out.println(user);
-    	System.out.println(u);
     	System.out.println(usrmsg.toString());
     	if (u == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("User not provided or not logged in.").build();

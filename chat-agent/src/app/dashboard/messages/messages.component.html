@@ -9,29 +9,30 @@
         </th>
       </thead>
       <tbody>
-        <div class="row m-2 p-2 shadow-lg border border-primary rounded" *ngFor="let user of inbox | keyvalue"
-          (click)="RowSelected(user.value);">
-          <div class="col-md-8 align-self-center rounded text-primary">{{user.key}}</div>
+        <button style="width: 100%;"class="row m-2 p-2 shadow-lg border border-primary rounded" *ngFor="let user of inbox | keyvalue"
+          (click)="RowSelected(user.value, user.key, $event);">
+          <div class="  rounded text-primary">{{user.key}}</div>
 
-      </div>
+      </button>
       </tbody>
     </table>
   </div>
-  <div class='col-md-8'>
+  <div class='col-md-8 ml-1'>
     <div class='row mb-3 border '>
-      <div id="" style="overflow-y:scroll; overflow-x:hidden; height:20em; width: 60em;">
+      <div id="scrollableContainer" style="overflow-y:scroll; overflow-x:hidden; height:20em; width: 60em;" >
         <div class="container">
-          <div class="row" *ngFor="let msg of messages" [ngClass]="{
+          <div class="row" *ngFor="let msg of messages; let last = last" [ngClass]="{
         'mr-3': msg.sender == currUser.username,
         'ml-3':msg.sender != currUser.username}">
-            <div class="col-md-3 mb-1 shadow-sm rounded" [ngClass]="{
-              'badge-primary offset-md-9': msg.sender == currUser.username,
+            <div class="p-1 mb-1 shadow-sm rounded" [ngClass]="{
+              'badge-primary align-to-right': msg.sender == currUser.username,
               'badge-secondary align-self-start':msg.sender != currUser.username}">
               <div class="border-bottom">
                 {{msg.subject}}
               </div>
               <div>
                 {{msg.content}}
+                {{last ? scrollToBottom() : ''}}
               </div>
             </div>
 
@@ -40,18 +41,20 @@
       </div>
     </div>
     <div class='row mt-3'>
-      <div class='col-md-9'>
+      <div class='col-md-8 mr-3'>
+        <form [formGroup]="form">
         <div class='row shadow-sm p-1 mb-1 bg-white rounded'>
-          <input type="text" style="width: 97%;" placeholder="Subject">
+          <input type="text" style="width: 100%;" formControlName="subject" id="subject" class="form-control" placeholder="Subject">
         </div>
         <div class='row mt-3 shadow-sm p-1 mb-1 bg-white rounded'>
-          <textarea rows="5" cols="70" style="resize: none;" placeholder="Content">
+          <textarea rows="5" cols="70" style="resize: none;" class="form-control" formControlName="content" placeholder="Content">
         </textarea>
         </div>
+      </form>
       </div>
-      <div class='col-md-3'>
+      <div class='col-md-3 ml-3 mt-3'>
         <div class='row mt-3'>
-          <button class="btn btn-secondary" style="width: 97%;" type="button" (click)="sendToEveryone(sendMessageModal)">
+          <button class="btn btn-secondary mt-3" style="width: 97%;" type="button" (click)="sendToEveryone(sendMessageModal)">
             Send to everyone
           </button>
         </div>
