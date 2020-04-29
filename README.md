@@ -10,7 +10,7 @@
 ### For backend
 - java
 - wildfly 11
-- [gson library](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6)
+- [gson library](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6) (jar file provided in jars directory)
 - Eclipse
 ## Running the application 
 
