@@ -7,11 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Init;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,6 +27,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
+import messageManager.MessageManagerBean;
+import messageManager.MessageManagerRemote;
 import model.Host;
 import model.Message;
 import model.User;
@@ -42,6 +47,14 @@ public class UserManagementBean {
 	
 	@Inject
 	UsrMsg usrmsg;
+	
+	@Resource(mappedName = "java:/ConnectionFactory")
+	private ConnectionFactory connectionFactory;
+	@Resource(mappedName = "java:jboss/exported/jms/queue/mojQueue")
+	private Queue queue;
+	
+	@EJB
+	MessageManagerBean msm;
     /**
      * Default constructor. 
      */
@@ -52,10 +65,10 @@ public class UserManagementBean {
 	@Path("users/register")
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response register(User user) {
-    	if(usrmsg.usersRegistered.get(user.getUsername()) != null) {
+    	if(usrmsg.getUsersRegistered().get(user.getUsername()) != null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Already registered").build();
     	}
-    	usrmsg.usersRegistered.put(user.getUsername(), user);
+    	usrmsg.getUsersRegistered().put(user.getUsername(), user);
 		//ws.echoTextMessage(user.toString());
 		return Response.status(200).build();
 	}
@@ -65,10 +78,10 @@ public class UserManagementBean {
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response login(User user) {
     	System.out.println("USO");
-    	if(usrmsg.usersLoggedin.get(user.getUsername()) != null) {
+    	if(usrmsg.getUsersLoggedin().get(user.getUsername()) != null) {
     		return Response.status(Response.Status.OK).entity("Already logged in").build();
     	}
-    	User regUser = usrmsg.usersRegistered.get(user.getUsername());
+    	User regUser = usrmsg.getUsersRegistered().get(user.getUsername());
     	if(regUser == null) {
     		System.out.println("USO1");
     		return Response.status(Response.Status.BAD_REQUEST).entity("Not registered").build();
@@ -79,7 +92,7 @@ public class UserManagementBean {
     		
     	}
     	usrmsg.usersLoggedin.put(user.getUsername(), regUser);
-    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
+    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
     	Gson gson = new Gson();
     	String loggedIn = gson.toJson(usersLoggedIn); 
     	System.out.println(loggedIn);
@@ -90,8 +103,8 @@ public class UserManagementBean {
     @DELETE
     @Path("users/loggedIn/{user}")
     public Response logout(@PathParam("user") String user) {
-    	if(usrmsg.usersLoggedin.get(user) != null) {
-    		usrmsg.usersLoggedin.remove(user);
+    	if(usrmsg.getUsersLoggedin().get(user) != null) {
+    		usrmsg.getUsersLoggedin().remove(user);
     		Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
         	Gson gson = new Gson();
         	String loggedIn = gson.toJson(usersLoggedIn); 
@@ -106,7 +119,7 @@ public class UserManagementBean {
     @GET
     @Path("users/loggedIn")
     public Response loggedInUsers() {
-    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.usersLoggedin.values();
+    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
     	return Response.status(Response.Status.OK).entity(usersLoggedIn).build();
     }
     @GET
@@ -114,7 +127,7 @@ public class UserManagementBean {
     @Produces(MediaType.APPLICATION_JSON)
     public Response registeredUsers() {
     	System.out.println(usrmsg.toString());
-    	Collection<User> usersRegistered = (Collection<User>) usrmsg.usersRegistered.values();
+    	Collection<User> usersRegistered = (Collection<User>) usrmsg.getUsersRegistered().values();
     	
     	return Response.status(Response.Status.OK).entity(usersRegistered).build();
     	
@@ -128,19 +141,11 @@ public class UserManagementBean {
     	if (msg.getSender() == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not found.").build();
     	}
-    	User sender = usrmsg.usersRegistered.get(msg.getSender());
+    	User sender = usrmsg.getUsersRegistered().get(msg.getSender());
     	if (sender == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Sender not registered.").build();
     	}
-    	for (Map.Entry<String, User> user : usrmsg.usersRegistered.entrySet()) {
-    		if(user.getValue().getUsername().equals(sender.getUsername())) {
-    			continue;
-    		}
-    		User u = user.getValue();
-    		msg.setReceiver(u.getUsername());
-    		u.receiveMessage(msg);
-    		sender.sendedMessage(msg);
-    	}
+    	msm.post(msg);
     	
 		//ws.echoTextMessage(msg.getContent());
 		return Response.status(200).build();
@@ -157,13 +162,12 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver not found.").build();
     	}
     	System.out.println(msg.getReceiver()+msg.getSender());
-    	User receiver = usrmsg.usersRegistered.get(msg.getReceiver());
-    	User sender = usrmsg.usersRegistered.get(msg.getSender());
+    	User receiver = usrmsg.getUsersRegistered().get(msg.getReceiver());
+    	User sender = usrmsg.getUsersRegistered().get(msg.getSender());
     	if (receiver == null || sender == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver or sender is not registered.").build();
     	}
-    	receiver.receiveMessage(msg);
-    	sender.sendedMessage(msg);
+    	msm.post(msg);
 		//ws.echoTextMessage(msg.getContent());
 		return Response.status(200).build();
 	}
@@ -172,7 +176,7 @@ public class UserManagementBean {
 	@Path("messages/{user}")
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response getMessages(@PathParam("user") String user) {
-    	User u = usrmsg.usersRegistered.get(user);
+    	User u = usrmsg.getUsersRegistered().get(user);
     	System.out.println(usrmsg.toString());
     	if (u == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("User not provided or not logged in.").build();

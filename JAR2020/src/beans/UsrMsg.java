@@ -21,7 +21,34 @@ public class UsrMsg {
     	usersRegistered = new HashMap<String, User>();
     	usersLoggedin = new HashMap<String, User>();
     }
-    @Override
+    
+    
+    
+    public HashMap<String, User> getUsersRegistered() {
+		return usersRegistered;
+	}
+
+
+
+	public void setUsersRegistered(HashMap<String, User> usersRegistered) {
+		this.usersRegistered = usersRegistered;
+	}
+
+
+
+	public HashMap<String, User> getUsersLoggedin() {
+		return usersLoggedin;
+	}
+
+
+
+	public void setUsersLoggedin(HashMap<String, User> usersLoggedin) {
+		this.usersLoggedin = usersLoggedin;
+	}
+
+
+
+	@Override
     public String toString() {
     	// TODO Auto-generated method stub
     	String retVal = "";

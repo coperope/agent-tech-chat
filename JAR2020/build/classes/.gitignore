@@ -1,1 +1,5 @@
+/model/
 /beans/
+/messageManager/
+/jboss-ejb-client.properties
+/jndi.properties

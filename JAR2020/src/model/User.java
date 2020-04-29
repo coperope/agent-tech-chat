@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.ejb.Stateful;
+import javax.jms.JMSException;
 
+
+@Stateful
 public class User implements Serializable {
 
 	/**
@@ -52,11 +56,13 @@ public class User implements Serializable {
 	public boolean receiveMessage(Message msg) {
 		if(!inbox.containsKey(msg.getSender())) {
 			List<Message> msgs = new ArrayList<Message>();
+			msg.setReceiver(this.getUsername());
 			msgs.add(msg);
 			inbox.put(msg.getSender(), msgs);
 		}else {
 			if (inbox.containsKey(msg.getSender())) {
 				List<Message> msgs = inbox.get(msg.getSender());
+				msg.setReceiver(this.getUsername());
 				msgs.add(msg);
 			}else {
 				return false;
@@ -83,6 +89,20 @@ public class User implements Serializable {
 	public User() {
 	}
 
+	public void handleMessage(Message msg) {
+		String receiver;
+		String sender;
+		String message;
+		receiver = msg.getReceiver();
+		sender = msg.getSender();
+		message = msg.getContent();
+		if (receiver.equals(this.username)) {
+			this.receiveMessage(msg);
+			System.out.println("Received from :" + sender);
+			System.out.println("Message : " + message);
+		}
+	}
+	
 	public User(String username, String password, Host host) {
 		this.username = username;
 		this.password = password;
