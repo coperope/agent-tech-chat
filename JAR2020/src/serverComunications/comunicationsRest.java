@@ -1,10 +1,12 @@
 package serverComunications;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,19 +25,23 @@ public interface comunicationsRest {
 	@POST
 	@Path("/node")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void oneNode(String connection);
+	public boolean oneNode(String connection);
 	
 	@POST
 	@Path("/nodes")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<String> allNodes(String connection);
+	public boolean allNodes(List<String> connection);
 	
 	@POST
 	@Path("/users/loggedIn")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<User> allUsers(String connection);
+	public boolean allUsers(HashMap<String,User> connection);
 	
 	@DELETE
 	@Path("/node/{alias}")
 	public boolean deleteNode(@PathParam("alias") String alias);
+	
+	@GET
+	@Path("/node")
+	public String getNode();
 }
