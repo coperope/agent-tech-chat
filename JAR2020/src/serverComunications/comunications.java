@@ -30,9 +30,11 @@ import model.User;
 @Singleton
 @Startup
 public class comunications {
-
-	private String master = null;
-	private String nodeName = null;
+	@EJB
+	UsrMsg usrmsg;
+	
+	private String master = "425b76be.ngrok.io";
+	private String nodeName = "3b0d1229.ngrok.io";
 	private List<String> connection = new ArrayList<>();
     /**
      * Default constructor. 
@@ -47,7 +49,7 @@ public class comunications {
 			this.connection = rest.newConnection(this.nodeName);
 			this.connection.remove(this.nodeName);
 			this.connection.add(this.master);
-			
+			this.usrmsg.setUsersLoggedin(rest.getAllUsers());
 		}
     }
    

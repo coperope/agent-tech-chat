@@ -37,6 +37,11 @@ public interface comunicationsRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean allUsers(HashMap<String,User> connection);
 	
+	@GET
+	@Path("/users/loggedIn")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public HashMap<String,User> getAllUsers();
+	
 	@DELETE
 	@Path("/node/{alias}")
 	public boolean deleteNode(@PathParam("alias") String alias);

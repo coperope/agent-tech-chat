@@ -49,9 +49,9 @@ public class ConnectionsBean implements comunicationsRest {
     		
 		}
     	ResteasyWebTarget rtarget = client.target("http://" + connection + "/WAR2020/rest/server");
-    	comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-		boolean test = rest.allUsers(this.usrmsg.getUsersLoggedin());
-		System.out.println(connection);
+    	//rest = rtarget.proxy(comunicationsRest.class);
+		//boolean test = rest.allUsers(this.usrmsg.getUsersLoggedin());
+		//System.out.println(connection);
 		comunications.getConnection().add(connection);
     	return comunications.getConnection();
     }
@@ -78,6 +78,10 @@ public class ConnectionsBean implements comunicationsRest {
 		this.usrmsg.setUsersLoggedin(connection);
 		return true;
 	}
+    
+    public HashMap<String,User> getAllUsers(){
+		return this.usrmsg.getUsersLoggedin();
+    }
 	
     @Override
 	public boolean deleteNode(@PathParam("alias") String alias) {
