@@ -39,7 +39,7 @@ public interface comunicationsRest {
 	
 	@GET
 	@Path("/users/loggedIn")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public HashMap<String,User> getAllUsers();
 	
 	@DELETE

@@ -50,6 +50,7 @@ public class comunications {
 			this.connection.remove(this.nodeName);
 			this.connection.add(this.master);
 			this.usrmsg.setUsersLoggedin(rest.getAllUsers());
+			System.out.println("ZAVRSIO");
 		}
     }
    
