@@ -43,6 +43,7 @@ public class comunications implements comunicationsRest{
      */
     @PostConstruct
 	private void init() {
+    	System.out.println("Here");
     	if (master != null && !master.equals("")) {
 			ResteasyClient client = new ResteasyClientBuilder().build();
 			ResteasyWebTarget rtarget = client.target("http://" + master + "/WAR2020/rest/server");
