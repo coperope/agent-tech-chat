@@ -29,15 +29,11 @@ import model.User;
  */
 @Singleton
 @Startup
-@Remote(comunicationsRest.class)
-@Path("/server")
-public class comunications implements comunicationsRest{
+public class comunications {
 
-	@EJB
-	UsrMsg usrmsg;
 	private String master = null;
 	private String nodeName = null;
-	private List<String> connection = new ArrayList<>();;
+	private List<String> connection = new ArrayList<>();
     /**
      * Default constructor. 
      */
@@ -51,70 +47,14 @@ public class comunications implements comunicationsRest{
 			this.connection = rest.newConnection(this.nodeName);
 			this.connection.remove(this.nodeName);
 			this.connection.add(this.master);
+			
 		}
     }
-    
-    @Override
-    public List<String> newConnection(String connection){
-    	ResteasyClient client = new ResteasyClientBuilder().establishConnectionTimeout(10, TimeUnit.SECONDS)
-                .socketTimeout(2, TimeUnit.SECONDS)
-                .build();
-    	for (String string : this.connection) {
-    		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
-    		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-    		rest.oneNode(connection);
-    		
-		}
-    	ResteasyWebTarget rtarget = client.target("http://" + connection + "/WAR2020/rest/server");
-    	comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-		System.out.println(rest.allUsers(this.usrmsg.getUsersLoggedin()));
-    	this.connection.add(connection);
-    	return this.connection;
-    }
-    
-    @Override
-    public boolean oneNode(String connection){
-    	for (String string : this.connection) {
-			if(string.equals(connection)) {
-				return true;
-			}
-		}
-    	this.connection.add(connection);
-    	return true;
-    }
-    
-    @Override
-    public boolean allNodes(List<String> connection){
-    	try {
-			Thread.sleep(12000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	this.connection = connection;
-    	return true;
-    }
-    
-    @Override
-	public boolean allUsers(HashMap<String,User> connection){
-		this.usrmsg.setUsersLoggedin(connection);
-		return true;
-	}
-	
-    @Override
-	public boolean deleteNode(@PathParam("alias") String alias) {
-		return true;
-	}
-	
-    @Override
-    public String getNode() {
-    	return this.nodeName;
-    }
+   
     
     @Schedule(hour = "*", minute = "10", info = "every ten minutes")
     public void heartBeat() {
-    	ResteasyClient client = new ResteasyClientBuilder().establishConnectionTimeout(100, TimeUnit.SECONDS)
-                .socketTimeout(2, TimeUnit.SECONDS)
+    	ResteasyClient client = new ResteasyClientBuilder()
                 .build();
     	for (String string : this.connection) {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
@@ -143,4 +83,25 @@ public class comunications implements comunicationsRest{
     	}
     	this.connection.remove(connection);
 	}
+
+
+	public String getNodeName() {
+		return nodeName;
+	}
+
+
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
+	}
+
+
+	public List<String> getConnection() {
+		return connection;
+	}
+
+
+	public void setConnection(List<String> connection) {
+		this.connection = connection;
+	}
+	
 }
