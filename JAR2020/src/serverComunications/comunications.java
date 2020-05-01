@@ -36,8 +36,7 @@ public class comunications implements comunicationsRest{
 	@EJB
 	UsrMsg usrmsg;
 	private String master = null;
-	private String nodeAddr;
-	private String nodeName;
+	private String nodeName = null;
 	private List<String> connection = new ArrayList<>();;
     /**
      * Default constructor. 
@@ -51,13 +50,14 @@ public class comunications implements comunicationsRest{
 			this.connection = rest.newConnection(this.nodeName);
 			this.connection.remove(this.nodeName);
 			this.connection.add(this.master);
-			
 		}
     }
     
     @Override
     public List<String> newConnection(String connection){
-    	ResteasyClient client = new ResteasyClientBuilder().build();
+    	ResteasyClient client = new ResteasyClientBuilder().establishConnectionTimeout(10, TimeUnit.SECONDS)
+                .socketTimeout(2, TimeUnit.SECONDS)
+                .build();
     	for (String string : this.connection) {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
     		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
@@ -66,7 +66,7 @@ public class comunications implements comunicationsRest{
 		}
     	ResteasyWebTarget rtarget = client.target("http://" + connection + "/WAR2020/rest/server");
     	comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-		rest.allUsers(this.usrmsg.getUsersLoggedin());
+		System.out.println(rest.allUsers(this.usrmsg.getUsersLoggedin()));
     	this.connection.add(connection);
     	return this.connection;
     }
@@ -84,6 +84,12 @@ public class comunications implements comunicationsRest{
     
     @Override
     public boolean allNodes(List<String> connection){
+    	try {
+			Thread.sleep(12000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	this.connection = connection;
     	return true;
     }
@@ -101,14 +107,14 @@ public class comunications implements comunicationsRest{
 	
     @Override
     public String getNode() {
-    	return this.nodeAddr;
+    	return this.nodeName;
     }
     
     @Schedule(hour = "*", minute = "10", info = "every ten minutes")
     public void heartBeat() {
     	ResteasyClient client = new ResteasyClientBuilder().establishConnectionTimeout(100, TimeUnit.SECONDS)
                 .socketTimeout(2, TimeUnit.SECONDS)
-                .build();;
+                .build();
     	for (String string : this.connection) {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
     		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
