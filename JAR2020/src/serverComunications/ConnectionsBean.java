@@ -45,13 +45,14 @@ public class ConnectionsBean implements comunicationsRest {
     	for (String string : comunications.getConnection()) {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
     		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-    		rest.oneNode(connection);
+    		rest.allUsers(usrmsg.getUsersLoggedin());
     		
 		}
     	ResteasyWebTarget rtarget = client.target("http://" + connection + "/WAR2020/rest/server");
     	//rest = rtarget.proxy(comunicationsRest.class);
 		//boolean test = rest.allUsers(this.usrmsg.getUsersLoggedin());
 		//System.out.println(connection);
+    	
 		comunications.getConnection().add(connection);
     	return comunications.getConnection();
     }
@@ -79,6 +80,7 @@ public class ConnectionsBean implements comunicationsRest {
 		return true;
 	}
     
+    @Override
     public HashMap<String,User> getAllUsers(){
 		return this.usrmsg.getUsersLoggedin();
     }

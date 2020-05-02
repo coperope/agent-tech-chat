@@ -33,8 +33,9 @@ public class comunications {
 	@EJB
 	UsrMsg usrmsg;
 	
-	private String master = "425b76be.ngrok.io";
-	private String nodeName = "3b0d1229.ngrok.io";
+	private String master = "";
+	private String nodeName = "1f5acc36.ngrok.io";
+	private String nodeAlias = "node2";
 	private List<String> connection = new ArrayList<>();
     /**
      * Default constructor. 
@@ -55,7 +56,7 @@ public class comunications {
     }
    
     
-    @Schedule(hour = "*", minute = "10", info = "every ten minutes")
+    @Schedule(hour = "*", minute = "*",second = "*/45", info = "every ten minutes")
     public void heartBeat() {
     	ResteasyClient client = new ResteasyClientBuilder()
                 .build();
@@ -73,8 +74,7 @@ public class comunications {
 		}
     }
 	public void removeNodeTellEveryone(String connection) {
-		ResteasyClient client = new ResteasyClientBuilder().establishConnectionTimeout(100, TimeUnit.SECONDS)
-                .socketTimeout(2, TimeUnit.SECONDS)
+		ResteasyClient client = new ResteasyClientBuilder()
                 .build();;
     	for (String string : this.connection) {
     		if(string.equals(connection)) {
@@ -96,7 +96,14 @@ public class comunications {
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
+	public String getNodeAlias() {
+		return nodeAlias;
+	}
 
+
+	public void setNodeAlias(String nodeAlias) {
+		this.nodeAlias = nodeAlias;
+	}
 
 	public List<String> getConnection() {
 		return connection;

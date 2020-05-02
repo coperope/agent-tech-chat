@@ -25,6 +25,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
 import com.google.gson.Gson;
 
 import messageManager.MessageManagerBean;
@@ -32,6 +36,8 @@ import messageManager.MessageManagerRemote;
 import model.Host;
 import model.Message;
 import model.User;
+import serverComunications.comunications;
+import serverComunications.comunicationsRest;
 import ws.WSEndPoint;
 
 /**
@@ -47,6 +53,9 @@ public class UserManagementBean {
 	
 	@Inject
 	UsrMsg usrmsg;
+	
+	@EJB
+	comunications communicate;
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
 	private ConnectionFactory connectionFactory;
@@ -68,6 +77,7 @@ public class UserManagementBean {
     	if(usrmsg.getUsersRegistered().get(user.getUsername()) != null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Already registered").build();
     	}
+    	user.setHost(new Host(communicate.getNodeAlias(),communicate.getNodeName()));
     	usrmsg.getUsersRegistered().put(user.getUsername(), user);
 		//ws.echoTextMessage(user.toString());
 		return Response.status(200).build();
@@ -91,7 +101,16 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Wrong password").build();
     		
     	}
-    	usrmsg.usersLoggedin.put(user.getUsername(), regUser);
+    
+    	usrmsg.getUsersLoggedin().put(user.getUsername(), regUser);
+    	ResteasyClient client = new ResteasyClientBuilder()
+                .build();
+    	for (String string : communicate.getConnection()) {
+    		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
+    		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
+    		rest.allUsers(usrmsg.getUsersLoggedin());
+    		
+		}
     	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
     	Gson gson = new Gson();
     	String loggedIn = gson.toJson(usersLoggedIn); 
@@ -181,7 +200,7 @@ public class UserManagementBean {
     	if (u == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("User not provided or not logged in.").build();
     	}
-    	
+    	System.out.println(u.getInbox());
     	return Response.status(Response.Status.OK).entity(u.getInbox()).build();
 		//ws.echoTextMessage(msg.getContent());
 		//return Response.status(200).build();
