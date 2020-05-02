@@ -109,7 +109,6 @@ public class UserManagementBean {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
     		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
     		rest.allUsers(usrmsg.getUsersLoggedin());
-    		
 		}
     	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
     	Gson gson = new Gson();

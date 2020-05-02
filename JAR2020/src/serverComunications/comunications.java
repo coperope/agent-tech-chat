@@ -24,6 +24,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import beans.UsrMsg;
 import model.User;
+import ws.WSEndPoint;
 /**
  * Session Bean implementation class comunications
  */

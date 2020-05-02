@@ -1,5 +1,6 @@
 package serverComunications;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
+import com.google.gson.Gson;
+
 import beans.UsrMsg;
 import model.User;
+import ws.WSEndPoint;
 
 /**
  * Session Bean implementation class ConnectionsBean
@@ -31,6 +35,9 @@ public class ConnectionsBean implements comunicationsRest {
 	
 	@EJB
 	comunications comunications;
+	@EJB
+	WSEndPoint ws;
+	
     /**
      * Default constructor. 
      */
@@ -45,7 +52,7 @@ public class ConnectionsBean implements comunicationsRest {
     	for (String string : comunications.getConnection()) {
     		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
     		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-    		rest.allUsers(usrmsg.getUsersLoggedin());
+    		rest.oneNode(connection);
     		
 		}
     	ResteasyWebTarget rtarget = client.target("http://" + connection + "/WAR2020/rest/server");
@@ -76,7 +83,12 @@ public class ConnectionsBean implements comunicationsRest {
     
     @Override
 	public boolean allUsers(HashMap<String,User> connection){
-		this.usrmsg.setUsersLoggedin(connection);
+    	this.usrmsg.setUsersLoggedin(connection);
+    	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
+    	Gson gson = new Gson();
+    	String loggedIn = gson.toJson(usersLoggedIn); 
+    	System.out.println(loggedIn);
+    	ws.echoTextMessage(loggedIn);
 		return true;
 	}
     
