@@ -26,7 +26,7 @@ public class comunications {
 	UsrMsg usrmsg;
 	
 	private String master = "";
-	private String nodeName = "c294defe.ngrok.io";
+	private String nodeName = "7355e045.ngrok.io";
 	private String nodeAlias = "node2";
 	private List<String> connection = new ArrayList<>();
     /**
