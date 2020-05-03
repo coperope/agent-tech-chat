@@ -41,8 +41,12 @@ public class QueueMDB implements MessageListener {
 		    	}
 			}else {
 				User receiver = agentRepo.getUsersRegistered().get(message.getReceiver());
-				receiver.receiveMessage(message);
-		    	sender.sendedMessage(message);
+				if (receiver != null) {
+					receiver.receiveMessage(message);
+				}
+				if (sender != null) {
+					sender.sendedMessage(message);
+				}
 			}
 		} catch (JMSException e) {
 			e.printStackTrace();

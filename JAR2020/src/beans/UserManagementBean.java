@@ -17,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -96,6 +97,7 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Wrong password").build();
     		
     	}
+    	regUser.setHost(this.communicate.getHost());
     
     	usrmsg.getUsersLoggedin().put(user.getUsername(), regUser);
     	ResteasyClient client = new ResteasyClientBuilder()
@@ -159,6 +161,7 @@ public class UserManagementBean {
 		//ws.echoTextMessage(msg.getContent());
 		return Response.status(200).build();
 	}
+    
     @POST
 	@Path("messages/users")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -171,10 +174,15 @@ public class UserManagementBean {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver not found.").build();
     	}
     	System.out.println(msg.getReceiver()+msg.getSender());
-    	User receiver = usrmsg.getUsersRegistered().get(msg.getReceiver());
+    	User receiver = usrmsg.getUsersLoggedin().get(msg.getReceiver());
     	User sender = usrmsg.getUsersRegistered().get(msg.getSender());
     	if (receiver == null || sender == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver or sender is not registered.").build();
+    	}
+    	if (!receiver.getHost().getAddress().equals(this.communicate.getHost().getAddress())) {
+    		ResteasyClient client = new ResteasyClientBuilder().build();
+    		ResteasyWebTarget rtarget = client.target("http://" + receiver.getHost().getAddress() + "/WAR2020/rest/messages/users");
+			rtarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(msg, MediaType.APPLICATION_JSON));
     	}
     	msm.post(msg);
 		//ws.echoTextMessage(msg.getContent());
