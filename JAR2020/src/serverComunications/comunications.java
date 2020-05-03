@@ -1,41 +1,32 @@
 package serverComunications;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Remote;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateless;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import beans.UsrMsg;
-import model.User;
-import ws.WSEndPoint;
 /**
  * Session Bean implementation class comunications
  */
 @Singleton
 @Startup
+@LocalBean
 public class comunications {
 	@EJB
 	UsrMsg usrmsg;
 	
 	private String master = "";
-	private String nodeName = "1f5acc36.ngrok.io";
+	private String nodeName = "c294defe.ngrok.io";
 	private String nodeAlias = "node2";
 	private List<String> connection = new ArrayList<>();
     /**
@@ -59,6 +50,7 @@ public class comunications {
     
     @Schedule(hour = "*", minute = "*",second = "*/45", info = "every ten minutes")
     public void heartBeat() {
+    	System.out.println("Timer");
     	ResteasyClient client = new ResteasyClientBuilder()
                 .build();
     	for (String string : this.connection) {

@@ -54,7 +54,7 @@ public class UserManagementBean {
 	@Inject
 	UsrMsg usrmsg;
 	
-	@EJB
+	@Inject
 	comunications communicate;
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
