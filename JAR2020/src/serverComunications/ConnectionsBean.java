@@ -18,6 +18,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import com.google.gson.Gson;
 
 import beans.UsrMsg;
+import model.Host;
 import model.User;
 import ws.WSEndPoint;
 
@@ -28,7 +29,7 @@ import ws.WSEndPoint;
 @LocalBean
 @Path("/server")
 @Remote(comunicationsRest.class)
-public class ConnectionsBean implements comunicationsRest {
+public class ConnectionsBean implements comunicationsRest, communicationsRestLocal {
 
 	@EJB
 	UsrMsg usrmsg;
@@ -105,5 +106,20 @@ public class ConnectionsBean implements comunicationsRest {
     @Override
     public String getNode() {
     	return comunications.getNodeName();
+    }
+    @Override
+    public void tellEveryone(HashMap<String,User> usersLoggedIn) {
+    	ResteasyClient client = new ResteasyClientBuilder()
+                .build();
+    	for (String string : comunications.getConnection()) {
+    		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
+    		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
+    		rest.allUsers(usrmsg.getUsersLoggedin());
+		}
+    }
+    
+    @Override
+    public Host getHost() {
+    	return new Host(comunications.getNodeAlias(),comunications.getNodeName());
     }
 }

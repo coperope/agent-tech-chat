@@ -2,14 +2,9 @@ package beans;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.Init;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,10 +27,10 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import com.google.gson.Gson;
 
 import messageManager.MessageManagerBean;
-import messageManager.MessageManagerRemote;
 import model.Host;
 import model.Message;
 import model.User;
+import serverComunications.ConnectionsBean;
 import serverComunications.comunications;
 import serverComunications.comunicationsRest;
 import ws.WSEndPoint;
@@ -55,7 +50,7 @@ public class UserManagementBean {
 	UsrMsg usrmsg;
 	
 	@Inject
-	comunications communicate;
+	ConnectionsBean communicate;
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
 	private ConnectionFactory connectionFactory;
@@ -77,7 +72,7 @@ public class UserManagementBean {
     	if(usrmsg.getUsersRegistered().get(user.getUsername()) != null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Already registered").build();
     	}
-    	user.setHost(new Host(communicate.getNodeAlias(),communicate.getNodeName()));
+    	user.setHost(communicate.getHost());
     	usrmsg.getUsersRegistered().put(user.getUsername(), user);
 		//ws.echoTextMessage(user.toString());
 		return Response.status(200).build();
@@ -105,11 +100,7 @@ public class UserManagementBean {
     	usrmsg.getUsersLoggedin().put(user.getUsername(), regUser);
     	ResteasyClient client = new ResteasyClientBuilder()
                 .build();
-    	for (String string : communicate.getConnection()) {
-    		ResteasyWebTarget rtarget = client.target("http://" + string + "/WAR2020/rest/server");
-    		comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
-    		rest.allUsers(usrmsg.getUsersLoggedin());
-		}
+    	communicate.tellEveryone(usrmsg.getUsersLoggedin());
     	Collection<User> usersLoggedIn = (Collection<User>) usrmsg.getUsersLoggedin().values();
     	Gson gson = new Gson();
     	String loggedIn = gson.toJson(usersLoggedIn); 
