@@ -101,6 +101,7 @@ public class ConnectionsBean implements comunicationsRest, communicationsRestLoc
 	
     @Override
 	public boolean deleteNode(@PathParam("alias") String alias) {
+    	this.comunications.getConnection().remove(alias);
 		return true;
 	}
 	

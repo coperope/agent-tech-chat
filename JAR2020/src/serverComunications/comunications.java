@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
@@ -79,7 +80,18 @@ public class comunications {
     	}
     	this.connection.remove(connection);
 	}
-
+	@PreDestroy
+	private void destroy() {
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		
+		for (String connection : this.connection) {
+			ResteasyWebTarget rtarget = client.target("http://" + connection + "/ChatWAR/connection");
+			comunicationsRest rest = rtarget.proxy(comunicationsRest.class);
+			rest.deleteNode(nodeName);
+		}
+		
+		System.out.println("Node is destroyed");
+	}
 
 	public String getNodeName() {
 		return nodeName;
