@@ -175,7 +175,7 @@ public class UserManagementBean {
     	}
     	System.out.println(msg.getReceiver()+msg.getSender());
     	User receiver = usrmsg.getUsersLoggedin().get(msg.getReceiver());
-    	User sender = usrmsg.getUsersRegistered().get(msg.getSender());
+    	User sender = usrmsg.getUsersLoggedin().get(msg.getSender());
     	if (receiver == null || sender == null) {
     		return Response.status(Response.Status.BAD_REQUEST).entity("Receiver or sender is not registered.").build();
     	}

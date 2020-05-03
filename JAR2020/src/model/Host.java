@@ -1,11 +1,15 @@
 package model;
 
-public class Host {
+import java.io.Serializable;
+
+public class Host implements Serializable{
 
 	private String alias;
 	private String address;
 	
-
+	public Host() {
+		
+	}
 	public Host(String alias, String address) {
 		super();
 		this.alias = alias;

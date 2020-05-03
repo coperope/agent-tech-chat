@@ -35,6 +35,7 @@ public interface comunicationsRest {
 	@POST
 	@Path("/users/loggedIn")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public boolean allUsers(HashMap<String,User> connection);
 	
 	@GET

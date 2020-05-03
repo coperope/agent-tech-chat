@@ -17,7 +17,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
-	private Host host;
+	private Host host = new Host();
 	private HashMap<String, List<Message>> inbox =  new HashMap<>();;
 	
 	

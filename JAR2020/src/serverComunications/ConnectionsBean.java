@@ -48,6 +48,7 @@ public class ConnectionsBean implements comunicationsRest, communicationsRestLoc
 
     @Override
     public List<String> newConnection(String connection){
+    	System.out.println("usao");
     	ResteasyClient client = new ResteasyClientBuilder()
                 .build();
     	for (String string : comunications.getConnection()) {
